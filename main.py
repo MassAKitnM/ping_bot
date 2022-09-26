@@ -9,23 +9,17 @@ load_dotenv(PATH + '/.env')
 TOKEN = getenv('TG_TOKEN')
 
 
-def defence(username, chatID):
-    username.replace("'", "")
-    username.replace('"', "")
-    return username, int(chatID)
-
 def get_users(chatid):
     db = sql.connect(DB_PATH)
     with db:
         c = db.cursor()
-        c.execute("SELECT username FROM users WHERE chatID = ?", [int(chatid)])
+        c.execute("SELECT username FROM users WHERE chatID = ?", (chatid,))
         users_list = [x[0] for x in c.fetchall()]
         return users_list
 
 
 def check_user(username, chatid):
     username = f"@{username}"
-    username, chatid = defence(username, chatid)
     with sql.connect(DB_PATH) as db:
         c = db.cursor()
         c.execute(
@@ -38,7 +32,6 @@ def check_user(username, chatid):
 
 def delete_user(username, chatid):
     username = f"@{username}"
-    username, chatid = defence(username, chatid)
     with sql.connect(DB_PATH) as db:
         c = db.cursor()
         c.execute(
@@ -67,7 +60,11 @@ def startbot():
 
     @ bot.message_handler(commands=['help'])
     def help_out(message):
-        txt = "/join for join and /ping for ping"
+        txt = """
+/join for join
+/ping for ping
+/delete for delete from current chat
+        """
         bot.send_message(message.chat.id, txt)
 
     @ bot.message_handler(commands=['delete'])
