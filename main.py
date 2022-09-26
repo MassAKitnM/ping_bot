@@ -78,8 +78,7 @@ def startbot():
 
 
 if __name__ == "__main__":
-    db = sql.connect(DB_PATH)
-    with db:
+    with sql.connect(DB_PATH) as db:
         c = db.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS users (username TEXT, chatID INT)")
         db.commit()
