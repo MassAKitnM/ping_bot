@@ -54,7 +54,7 @@ def startbot():
         users_list = get_users(message.chat.id)
         all_users = ""
         for user in users_list:
-            all_users += user
+            all_users += f'{user} '
         if (len(all_users)) > 0:
             bot.send_message(message.chat.id, all_users)
 
